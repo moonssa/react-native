@@ -10,11 +10,21 @@ import {
 } from "react-native";
 import * as Location from "expo-location";
 import React, { useEffect, useState } from "react";
+import { Fontisto } from "@expo/vector-icons";
 
 // const {height, width} = Dimensions.get('window');
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const API_KEY = "fed5f48ab273601bbc5efb9b5696d0b7";
 
+const icons = {
+  Clouds: "cloudy",
+  Clear: "day-sunny",
+  Rain: "rains",
+  Thunderstorm: "lightning",
+  Drizzle: "rain",
+  Snow: "snow",
+  Atmosphere: "cloudy-gusts",
+};
 export default function App() {
   const [days, setDays] = useState([]);
   const [city, setCity] = useState("Loading...");
@@ -56,15 +66,29 @@ export default function App() {
         contentContainerStyle={styles.weather}
       >
         {days.length === 0 ? (
-          <View style={styles.day}>
+          <View style={{ ...styles.day, alignItems: "center" }}>
             <ActivityIndicator size="large" color="#0000ff" />
           </View>
         ) : (
           days.map((day, index) => (
             <View key={index} style={styles.day}>
-              <Text style={styles.temp}>
-                {parseFloat(day.temp.day).toFixed(1)}
-              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={styles.temp}>
+                  {parseFloat(day.temp.day).toFixed(1)}
+                </Text>
+                <Fontisto
+                  name={icons[day.weather[0].main]}
+                  size={68}
+                  color="white"
+                />
+              </View>
               <Text style={styles.description}>{day.weather[0].main}</Text>
               <Text style={styles.tiny_description}>
                 {day.weather[0].description}
@@ -89,8 +113,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   cityName: {
-    fontSize: 62,
+    fontSize: 58,
     fontWeight: "500",
+    color: "white",
   },
   weather: {
     // flex: 3,
@@ -98,18 +123,28 @@ const styles = StyleSheet.create({
   },
   day: {
     width: SCREEN_WIDTH,
-    alignItems: "center",
+    alignItems: "flex-start",
+    paddingHorizontal: 20,
+
     // backgroundColor: "orange",
   },
   temp: {
     marginTop: 50,
-    fontSize: 150,
+    fontWeight: "600",
+    fontSize: 100,
+    color: "white",
   },
   description: {
-    marginTop: -30,
-    fontSize: 60,
+    marginTop: -10,
+    fontSize: 30,
+    fontWeight: "500",
+    color: "white",
   },
   tiny_description: {
-    fontSize: 20,
+    marginTop: -5,
+    fontSize: 25,
+    color: "white",
+    // paddingLeft: 5,
+    fontWeight: "500",
   },
 });
